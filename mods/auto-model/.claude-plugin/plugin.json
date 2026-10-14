@@ -1,0 +1,84 @@
+{
+  "name": "auto-model",
+  "version": "0.4.0",
+  "description": "Picks the model for each prompt and each subagent (never above /model and /effort for prompts), with Jev, OpenAI or Claude as the picker, and shows a colored bar under the input: model, effort, context, 7-day limit and agents. /auto-model on|off, /route for subagents. Subagent picking is ported from Hamza Zafar's switchboard (MIT).",
+  "author": {
+    "name": "Nereo Valeriano"
+  },
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "picker": {
+      "type": "string",
+      "title": "Picker",
+      "description": "Who picks the models. jev (TypeSafe's decision model, default) and openai (OpenAI's Decisions API) answer with a calibrated confidence and need their own key. claude asks Haiku through your Claude Code session: no extra key, nothing sent to a third party, but its confidence is its own rating and a pick takes longer.",
+      "options": [
+        "jev",
+        "openai",
+        "claude"
+      ],
+      "default": "jev"
+    },
+    "style": {
+      "type": "string",
+      "title": "Style",
+      "description": "saver (default) picks the cheapest model that will do the work well. quality pays for the better model on anything you will rely on. Applies to prompts and subagents.",
+      "options": [
+        "saver",
+        "quality"
+      ],
+      "default": "saver"
+    },
+    "switchDownUntil": {
+      "type": "string",
+      "title": "Switch down until",
+      "description": "A cheaper model or a lower effort re-reads the whole conversation without the cache. Above this many context tokens the turn stays at the model and effort the last turn used (moving up is always allowed).",
+      "options": [
+        "100k",
+        "250k",
+        "always"
+      ],
+      "default": "100k"
+    },
+    "agents": {
+      "type": "string",
+      "title": "Subagents",
+      "description": "auto switches a subagent that names no model to the one Jev picks. suggest only shows the pick in the band and /route. off leaves every subagent's model alone and sends Jev nothing about them.",
+      "options": [
+        "auto",
+        "suggest",
+        "off"
+      ],
+      "default": "auto"
+    },
+    "agentModels": {
+      "type": "string",
+      "title": "Subagent models",
+      "description": "The models Jev may pick between for a subagent, cheapest first.",
+      "options": [
+        "haiku-sonnet-opus",
+        "sonnet-opus-fable"
+      ],
+      "default": "haiku-sonnet-opus"
+    },
+    "keepNamed": {
+      "type": "boolean",
+      "title": "Keep a named model",
+      "description": "A subagent whose caller named a model keeps it. Turn off to have Jev pick for those too.",
+      "default": true
+    },
+    "jevApiKey": {
+      "type": "string",
+      "title": "TypeSafe API key",
+      "description": "For the jev picker, at api.typesafe.ai. Empty uses TYPESAFE_API_KEY from the environment.",
+      "sensitive": true,
+      "default": ""
+    },
+    "openaiApiKey": {
+      "type": "string",
+      "title": "OpenAI API key",
+      "description": "For the openai picker. Empty uses OPENAI_API_KEY from the environment.",
+      "sensitive": true,
+      "default": ""
+    }
+  }
+}
