@@ -193,7 +193,7 @@ export const register: Register = (on, options) => {
   })
 
   // The subagents running now, or finished in the last 30 s, above the prompt; off the terminal,
-  // the bar too, on top.
+  // the bar too, at the bottom, next to the input.
   on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
     const rest = await next(e) // what other mods and Claude Code draw here stays
     await read($, now) // subscribes the band to the clock
@@ -204,7 +204,6 @@ export const register: Register = (on, options) => {
     const mode = live.agents === 'suggest' ? 'suggest' : 'auto'
     return (
       <Box flexDirection="column">
-        {withBar && (await bar($, Text))}
         {shown.slice(0, BAND_ROWS).map(r => (
           <Text wrap="truncate-end">
             <Text color={routeColor(r)} bold>{` ⇄ ${r.description}`}</Text>
@@ -214,6 +213,7 @@ export const register: Register = (on, options) => {
         ))}
         {shown.length > BAND_ROWS && <Text dimColor>{`   +${shown.length - BAND_ROWS} more · /route`}</Text>}
         {rest}
+        {withBar && (await bar($, Text))}
       </Box>
     )
   })
