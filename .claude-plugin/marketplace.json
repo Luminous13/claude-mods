@@ -7,8 +7,8 @@
   "plugins": [
     {
       "name": "auto-model",
-      "description": "Picks the model for each prompt and each subagent (never above /model and /effort for prompts), with Jev, OpenAI or Claude as the picker, and shows a colored bar under the input: model, effort, context, 7-day limit and agents. /auto-model on|off, /route for subagents. Subagent picking is ported from Hamza Zafar's switchboard (MIT).",
-      "version": "0.4.0",
+      "description": "Picks the model for each prompt and each subagent (never above /model and /effort for prompts), with Jev, OpenAI or Claude as the picker, and shows a colored bar under the input, or above it in Desktop: model, effort, context, 7-day limit and agents. /auto-model on|off, /route for subagents. Subagent picking is ported from Hamza Zafar's switchboard (MIT).",
+      "version": "0.4.1",
       "source": "./mods/auto-model"
     },
     {

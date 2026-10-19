@@ -6,6 +6,7 @@ const USAGE = { input_tokens: 1_000, output_tokens: 200, cache_read_input_tokens
 const START = { surface: 'terminal', isInteractive: true, cwd: '/work' } as any
 const BASE = { switchDownUntil: 100_000, minConfidence: 0.5 }
 const HINT = { component: 'PromptHint', props: { isDraft: false, isWorking: true, hint: 'esc to interrupt' } } as const
+const BAND = { component: 'AbovePrompt', props: { hasSurvey: false, isWorking: true, maxRows: 10, bodyColumns: 120 } } as any
 const LIMITS = [
   { kind: 'five_hour', percentUsed: 12 },
   { kind: 'seven_day', percentUsed: 54 },
@@ -159,13 +160,21 @@ describe('auto-model', () => {
     expect(w.stepped[1]).toEqual({ model: 'claude-sonnet-5-5', effort: 'high' })
     expect(shown(w)).toContain('│  ◆ 1 agent  ● Sonnet 5.5')
 
-    // Drawn under the prompt, above the engine's hint, on both surfaces that have the line.
-    for (const surface of ['terminal', 'desktop'] as const) {
-      const ui = await $.ui.mount({ plugin: 'auto-model', surface, ...HINT })
-      expect(await ui.find({ type: 'Text', text: /esc to interrupt/ })).toBeDefined()
-      expect(await ui.find({ type: 'Text', text: /Haiku 5\.5/ })).toBeDefined()
-      await ui.unmount()
-    }
+    // On the terminal: under the prompt, above the engine's hint.
+    const term = await $.ui.mount({ plugin: 'auto-model', surface: 'terminal', ...HINT })
+    expect(await term.find({ type: 'Text', text: /esc to interrupt/ })).toBeDefined()
+    expect(await term.find({ type: 'Text', text: /Haiku 5\.5/ })).toBeDefined()
+    await term.unmount()
+    const termBand = await $.ui.mount({ plugin: 'auto-model', surface: 'terminal', ...BAND })
+    expect(await termBand.find({ type: 'Text', text: /Haiku 5\.5/ })).toBeUndefined()
+    await termBand.unmount()
+    // On the desktop, which draws no hint line: the hint is left alone and the bar sits above the prompt.
+    const hint = await $.ui.mount({ plugin: 'auto-model', surface: 'desktop', ...HINT })
+    expect(await hint.find({ type: 'Text', text: /Haiku 5\.5/ })).toBeUndefined()
+    await hint.unmount()
+    const band = await $.ui.mount({ plugin: 'auto-model', surface: 'desktop', ...BAND })
+    expect(await band.find({ type: 'Text', text: /Haiku 5\.5/ })).toBeDefined()
+    await band.unmount()
 
     await $.turn.complete(complete('t1', 'a1'))
     await $.turn.complete(complete('t1'))

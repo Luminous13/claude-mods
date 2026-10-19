@@ -4,7 +4,7 @@ Claude Code mods by Nereo Valeriano. Each one is a plugin in this marketplace.
 
 | Mod | What it does |
 | --- | --- |
-| **auto-model** | Picks the model and effort for each of your prompts, and the model for each subagent. Shows a colored bar under the input with the model, effort, context and limits. |
+| **auto-model** | Picks the model and effort for each of your prompts, and the model for each subagent. Shows a colored bar under the input (above it in Desktop) with the model, effort, context and limits. |
 | **where-am-i** | A card above the prompt with where the session stands: goal, status and recent progress. Fork of Hamza Zafar's where-am-i. |
 | **next-steps** | Suggested next steps, shown in the where-am-i card with clickable number badges. Fork of Hamza Zafar's next-steps. |
 
