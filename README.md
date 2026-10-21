@@ -5,8 +5,7 @@ Claude Code mods by Nereo Valeriano. Each one is a plugin in this marketplace.
 | Mod | What it does |
 | --- | --- |
 | **auto-model** | Picks the model and effort for each of your prompts, and the model for each subagent. Shows a colored bar under the input with the model, effort, context and limits. |
-| **where-am-i** | A card above the prompt with where the session stands: goal, status and recent progress. Fork of Hamza Zafar's where-am-i. |
-| **next-steps** | Suggested next steps, shown in the where-am-i card with clickable number badges. Fork of Hamza Zafar's next-steps. |
+| **where-am-i** | A card above the prompt with where the session stands: goal, status and recent progress, plus suggested next steps with clickable number badges. Fork of Hamza Zafar's where-am-i, with his next-steps folded in. |
 
 ## Install
 
@@ -14,12 +13,16 @@ Claude Code mods by Nereo Valeriano. Each one is a plugin in this marketplace.
 /plugin marketplace add Luminous13/claude-mods
 /plugin install auto-model@claude-mods
 /plugin install where-am-i@claude-mods
-/plugin install next-steps@claude-mods
 ```
 
-Install where-am-i and next-steps together: the where-am-i card shows what next-steps suggests.
+Don't also install Hamza's originals of where-am-i or next-steps. where-am-i has the same name and would clash, and next-steps would draw a second list of suggestions.
 
-Don't also install Hamza's originals of where-am-i or next-steps. They have the same names and would clash.
+If you installed next-steps from here before, uninstall it: where-am-i does its job now.
+
+## where-am-i settings
+
+- **Suggested next steps** (on by default): after each turn, 2 or 3 likely next prompts inside the card, one small Haiku call per turn. Turn it off to keep the plain Next row.
+- **Leader key** (`;`, `,` or `\`): type it in an empty prompt, then 1, 2 or 3 to draft a suggestion, or 0 to dismiss them. A bare digit types as usual.
 
 ## auto-model picker
 
@@ -33,4 +36,4 @@ Subagent picking was ported from Hamza Zafar's switchboard. See [NOTICE.md](mods
 
 ## Licence
 
-MIT. See [LICENSE](LICENSE). The where-am-i and next-steps forks keep Hamza Zafar's copyright; see their NOTICE.md files.
+MIT. See [LICENSE](LICENSE). The where-am-i fork keeps Hamza Zafar's copyright; see its NOTICE.md.

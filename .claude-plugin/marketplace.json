@@ -1,6 +1,6 @@
 {
   "name": "claude-mods",
-  "description": "Claude Code mods by Nereo Valeriano: model routing for prompts and subagents, a where-am-i card and suggested next steps.",
+  "description": "Claude Code mods by Nereo Valeriano: model routing for prompts and subagents, and a where-am-i card with suggested next steps.",
   "owner": {
     "name": "Nereo Valeriano"
   },
@@ -13,15 +13,9 @@
     },
     {
       "name": "where-am-i",
-      "description": "A live recap above the prompt as one card: the goal as its title; now, waiting on you and next with their status; and the next-steps suggestions in the same box. /where for a longer one.",
-      "version": "0.2.0",
+      "description": "A live recap above the prompt as one card: the goal as its title; now, waiting on you and next with their status; and suggested next prompts in the same box (on by default, off in /config). /where for a longer one.",
+      "version": "0.3.0",
       "source": "./mods/where-am-i"
-    },
-    {
-      "name": "next-steps",
-      "description": "After each turn, 2 or 3 likely next prompts above the prompt. In an empty prompt type ; then 1, 2 or 3 to draft one, ;0 to dismiss. A bare digit types as usual.",
-      "version": "0.2.0",
-      "source": "./mods/next-steps"
     }
   ]
 }

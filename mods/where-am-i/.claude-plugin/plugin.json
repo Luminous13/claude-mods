@@ -1,10 +1,29 @@
 {
   "name": "where-am-i",
-  "version": "0.2.0",
-  "description": "A live recap above the prompt as one card: the goal as its title; now, waiting on you and next with their status; and the next-steps suggestions in the same box. /where for a longer one.",
+  "version": "0.3.0",
+  "description": "A live recap above the prompt as one card: the goal as its title; now, waiting on you and next with their status; and suggested next prompts in the same box (on by default, off in /config). /where for a longer one.",
   "author": {
     "name": "Hamza Zafar",
     "url": "https://github.com/hamzafer"
   },
-  "types": "./types/index.d.ts"
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "nextSteps": {
+      "type": "boolean",
+      "title": "Suggested next steps",
+      "description": "After each turn, 2 or 3 likely next prompts inside the card (one small model call per turn). Off keeps the plain Next row.",
+      "default": true
+    },
+    "leader": {
+      "type": "string",
+      "title": "Leader key",
+      "description": "Typed first in an empty prompt, then the number, so a stray digit never picks a suggestion.",
+      "options": [
+        ";",
+        ",",
+        "\\"
+      ],
+      "default": ";"
+    }
+  }
 }
