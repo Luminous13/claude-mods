@@ -1,4 +1,4 @@
-// Auto model: a picker (Jev by default, or OpenAI, or Claude) picks the main model for each prompt, and a colored line under the input
+// Auto model: a picker (Jev by default, or OpenAI, or Claude) picks the main model for each prompt, and a colored line under the input (above it in Desktop)
 // says which model each call actually runs on, subagents included.
 //   As a turn starts, Jev reads the prompt (secrets cut, its first 1,500 characters) and picks
 //   Haiku, Sonnet or Opus and an effort, never above what /model and /effort set. Every request
@@ -9,7 +9,7 @@
 //   short label alone (never the task text). /route lists every subagent, its pick and its cost.
 //   That half is ported from Hamza Zafar's switchboard 0.3.1 (MIT, see NOTICE.md).
 import { atom, read, update } from 'claude-code'
-import type { EngineInterface, Register } from 'claude-code'
+import type { ElementConstructor, EngineInterface, Register, TextProps } from 'claude-code'
 
 import type { Line, Note, Route, Stats, Tier } from '../types'
 import { LADDERS, PRICES_AS_OF, addUsage, agentPickOf, agentQuestions, agentState, baseline, costOf, isShown, move, totals, trim, usdOrUnknown } from './agents'
@@ -178,33 +178,28 @@ export const register: Register = (on, options) => {
     return r
   })
 
-  // The bar under the prompt, drawn above the engine's own hint line.
+  // The bar under the prompt, drawn above the engine's own hint line. Only the terminal draws that
+  // line: elsewhere (the desktop's Code tab) the bar goes in the band above the prompt instead.
   on('ui.render', { component: 'PromptHint' }, async ($, e, next) => {
     const hint = await next(e)
-    const { main, meter, subagents } = await read($, line)
-    const now = Date.now()
-    const running = Object.values(subagents)
-      .filter(s => now - s.at < SUBAGENT_STALE_MS)
-      .map(s => s.model)
+    if (e.surface !== 'terminal') return hint
     const { Box, Text } = $.ui.resolve(e)
     return (
       <Box flexDirection="column">
-        <Text wrap="truncate-end">
-          {segments({ main, meter }, running).map(s => (
-            <Text {...style(s)}>{s.text}</Text>
-          ))}
-        </Text>
+        {await bar($, Text)}
         {hint}
       </Box>
     )
   })
 
-  // The subagents running now, or finished in the last 30 s, above the prompt.
+  // The subagents running now, or finished in the last 30 s, above the prompt; off the terminal,
+  // the bar too, at the bottom, next to the input.
   on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
     const rest = await next(e) // what other mods and Claude Code draw here stays
     await read($, now) // subscribes the band to the clock
     const shown = (await read($, routes)).filter(r => isShown(r))
-    if (e.props.hasSurvey || shown.length === 0) return rest
+    const withBar = e.surface !== 'terminal'
+    if (e.props.hasSurvey || (shown.length === 0 && !withBar)) return rest
     const { Box, Text } = $.ui.resolve(e)
     const mode = live.agents === 'suggest' ? 'suggest' : 'auto'
     return (
@@ -218,6 +213,7 @@ export const register: Register = (on, options) => {
         ))}
         {shown.length > BAND_ROWS && <Text dimColor>{`   +${shown.length - BAND_ROWS} more · /route`}</Text>}
         {rest}
+        {withBar && (await bar($, Text))}
       </Box>
     )
   })
@@ -284,6 +280,22 @@ export const register: Register = (on, options) => {
       ].join('\n'),
     }
   })
+}
+
+// The colored line: the main model and its note, effort, context, 7-day limit and the subagents running.
+async function bar($: EngineInterface, Text: ElementConstructor<TextProps>) {
+  const { main, meter, subagents } = await read($, line)
+  const now = Date.now()
+  const running = Object.values(subagents)
+    .filter(s => now - s.at < SUBAGENT_STALE_MS)
+    .map(s => s.model)
+  return (
+    <Text wrap="truncate-end">
+      {segments({ main, meter }, running).map(s => (
+        <Text {...style(s)}>{s.text}</Text>
+      ))}
+    </Text>
+  )
 }
 
 // A segment's style as Text props, leaving out what it does not set.
@@ -412,7 +424,7 @@ async function recordAgentTurn($: EngineInterface, id: string, failed: boolean, 
       const model = usage?.model ?? x.model ?? (x.applied ? x.picked : x.asked) ?? x.picked ?? ''
       return {
         ...x,
-        status: failed ? 'failed' : 'done',
+        status: failed ? ('failed' as const) : ('done' as const),
         endedAt: Date.now(),
         model,
         usage: total,
