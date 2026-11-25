@@ -71,7 +71,7 @@ describe('where-am-i: the recap', () => {
     const ui = await mount($)
     const drawn = JSON.stringify(await ui.drawn())
     expect(drawn).toContain('"borderStyle":"round"')
-    expect(drawn).toContain('"borderColor":"#fb7185"')
+    expect(drawn).toContain('"borderColor":"#f43f5e"')
     for (const w of ['Ship ', '3 ', 'mods']) expect(await ui.find({ type: 'Text', text: new RegExp(`^${w}$`) })).toBeDefined()
     expect(await ui.find({ type: 'Text', text: /^built Where Am I$/ })).toBeDefined()
     expect(await ui.find({ type: 'Text', text: /^Done$/ })).toBeDefined()
@@ -88,7 +88,7 @@ describe('where-am-i: the recap', () => {
     await recapped($)
     const ui = await mount($)
     const drawn = JSON.stringify(await ui.drawn())
-    for (const c of ['#fbbf24', '#fde68a', '#c4b5fd', '#ddd6fe']) expect(drawn).toContain(c)
+    for (const c of ['"color":"warning"', '"color":"text"', '#a855f7']) expect(drawn).toContain(c)
     await ui.unmount()
   })
 
@@ -185,7 +185,7 @@ describe('where-am-i: the suggested next steps, in the same card', () => {
     expect(await ui.find({ type: 'Button', label: '3' })).toBeDefined()
     expect(await ui.find({ type: 'Button', label: '0' })).toBeDefined()
     expect(await ui.find({ type: 'Text', text: /^Rulebook Guard$/ })).toBeUndefined() // the suggestions stand in for next
-    for (const c of ['#f472b6', '#a5b4fc', '#5eead4', '#f9a8d4', '#c7d2fe', '#99f6e4']) expect(drawn).toContain(c)
+    for (const c of ['#ec4899', '#6366f1', '#0d9488', '"color":"text"']) expect(drawn).toContain(c)
     await ui.unmount()
   })
 
