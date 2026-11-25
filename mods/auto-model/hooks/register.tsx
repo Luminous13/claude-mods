@@ -454,5 +454,5 @@ function routeIcon(r: Route) {
 }
 
 function routeColor(r: Route) {
-  return r.status === 'running' ? 'yellow' : r.status === 'done' ? 'green' : 'red'
+  return r.status === 'running' ? 'warning' : r.status === 'done' ? 'success' : 'error' // theme keys: readable in light mode too
 }

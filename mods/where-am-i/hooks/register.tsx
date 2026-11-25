@@ -26,22 +26,26 @@ const steps = atom({ plugin: 'where-am-i', key: 'steps' } as const, null as Next
 // True while the prompt holds the leader alone: the card then shows the digits to press.
 const armed = atom({ plugin: 'where-am-i', key: 'armed' } as const, false)
 
-const PINK = '#f472b6'
-const BORDER = '#fb7185'
-const PALETTE = ['#fdba74', '#f472b6', '#c4b5fd', '#93c5fd'] // the goal's words, in turn
-const PULSE = ['#831843', '#be185d', '#ec4899', '#f9a8d4'] // the blocks beside Working
+// Light mode patch: a mod can't tell which mode shows, so every color here reads on both a light
+// and a dark background. Mid-tone hues clear about 3.3:1 or better on white and on near-black,
+// where the original pastels fell to 1.2-2.7:1 on light. Status marks and body text use theme
+// keys ('success', 'warning', 'text'), which follow the person's theme.
+const PINK = '#ec4899'
+const BORDER = '#f43f5e'
+const PALETTE = ['#ea580c', '#ec4899', '#a855f7', '#3b82f6'] // the goal's words, in turn
+const PULSE = ['#be185d', '#db2777', '#ec4899', '#f472b6'] // the blocks beside Working
 const PULSE_MS = 150 // one step of the pulse
-const ROW_COLORS = ['#f472b6', '#a5b4fc', '#5eead4'] // suggestion 1, 2 and 3
-const ROW_TINTS = ['#f9a8d4', '#c7d2fe', '#99f6e4'] // their text, a shade lighter
+const ROW_COLORS = ['#ec4899', '#6366f1', '#0d9488'] // suggestion 1, 2 and 3 (black digits on them clear 4.5:1)
+const ROW_TINTS = ['text', 'text', 'text'] // their text, in the theme's own text color
 // Each row in its own color, as the auto-model bar colors its values: now pink, done green,
-// waiting yellow, next lavender. The bullet and status in the full color, the text a tint of it.
+// waiting yellow, next purple. The bullet and status in the color, the text in the theme's text color.
 const TONE = {
-  working: { mark: '#f472b6', text: '#f9a8d4' },
-  done: { mark: '#34d399', text: '#a7f3d0' },
-  waiting: { mark: '#fbbf24', text: '#fde68a' },
-  next: { mark: '#c4b5fd', text: '#ddd6fe' },
+  working: { mark: PINK, text: 'text' },
+  done: { mark: 'success', text: 'text' },
+  waiting: { mark: 'warning', text: 'text' },
+  next: { mark: '#a855f7', text: 'text' },
 } as const
-const HEADING: [string, string][] = [['Suggested ', '#fdba74'], ['next ', '#f472b6'], ['steps', '#c4b5fd']]
+const HEADING: [string, string][] = [['Suggested ', '#ea580c'], ['next ', '#ec4899'], ['steps', '#a855f7']]
 const CARD_MIN_COLUMNS = 40
 
 let pulse: { cancel: () => void } | null = null

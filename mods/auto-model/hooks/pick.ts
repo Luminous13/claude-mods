@@ -191,8 +191,9 @@ export function meterOf(u: { context?: { percent?: number }; rateLimits?: readon
 // One run of text on the line, styled. Colors are theme keys (light and dark alike) or hex.
 export type Seg = { text: string; color?: string; bg?: string; bold?: boolean; dim?: boolean; strike?: boolean }
 
-export const TIER_COLOR: Record<Tier, string> = { haiku: '#34d399', sonnet: '#60a5fa', opus: 'claude', fable: '#c084fc' }
-export const EFFORT_COLOR: Record<Effort, string> = { low: '#34d399', medium: '#60a5fa', high: '#fbbf24', xhigh: 'claude', max: '#f87171' }
+// Theme keys, not raw hex, so each follows the person's light or dark theme (light mode patch).
+export const TIER_COLOR: Record<Tier, string> = { haiku: 'success', sonnet: 'suggestion', opus: 'claude', fable: 'merged' }
+export const EFFORT_COLOR: Record<Effort, string> = { low: 'success', medium: 'suggestion', high: 'warning', xhigh: 'claude', max: 'error' }
 export function colorOf(model: string | undefined): string {
   const t = tierOf(model)
   return t ? TIER_COLOR[t] : 'inactive'

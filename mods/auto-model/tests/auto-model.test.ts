@@ -129,13 +129,13 @@ describe('auto-model', () => {
     const main = { model: 'claude-haiku-5-5', note: { kind: 'switched', from: 'claude-opus-5-5', sure: 0.82 }, phase: 'running', effort: 'low', effortNote: 'auto' } as const
     const segs = segments({ main, meter: { ctx: 9, sevenDay: 54 } }, ['claude-sonnet-5-5', 'claude-sonnet-5-5', 'claude-haiku-5-5'])
     expect(plain(segs)).toBe('◆ Haiku 5.5 ↓ Opus 5.5 · Jev 82%  │  effort low ↓  │  ctx ▰▱▱▱▱▱▱▱▱▱ 9%  │  7d 54%  │  ◆ 3 agents  ● Sonnet 5.5 ×2  ● Haiku 5.5')
-    expect(segs[0]).toEqual({ text: '◆ ', color: '#34d399' })
+    expect(segs[0]).toEqual({ text: '◆ ', color: 'success' })
     expect(segs.find(s => s.text === 'Haiku 5.5')).toEqual({ text: 'Haiku 5.5', bold: true })
     expect(segs.find(s => s.text === 'Opus 5.5')).toMatchObject({ dim: true, strike: true })
-    expect(segs.find(s => s.text === 'low')?.color).toBe('#34d399')
+    expect(segs.find(s => s.text === 'low')?.color).toBe('success')
     expect(segs.find(s => s.text === '▰')?.color).toBe('success')
     expect(segs.find(s => s.text === '54%')?.color).toBe('warning')
-    expect(segs.find(s => s.text.includes('Sonnet 5.5 ×2'))?.color).toBe('#60a5fa')
+    expect(segs.find(s => s.text.includes('Sonnet 5.5 ×2'))?.color).toBe('suggestion')
 
     expect(plain(segments({ main: { ...main, model: 'claude-opus-5-5', note: { kind: 'held', sure: 0.9, wanted: 'claude-haiku-5-5', tokens: 300_000 }, effort: 'xhigh', effortNote: 'held' }, meter: { ctx: 85 } }, []))).toBe(
       '◆ Opus 5.5 ⏸ held, wanted Haiku 5.5 · Jev 90%  │  effort xhigh ⏸  │  ctx ▰▰▰▰▰▰▰▰▰▱ 85%  │  ◇ 0 agents',
